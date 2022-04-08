@@ -56,29 +56,28 @@ def build_vocabulary(image_paths, vocab_size, step_sample=8):
     '''
     Input : 
         image_paths : a list of training image path
-        vocal size : number of clusters desired
+        vocal size  : number of clusters desired
+        step_sample : Pass to dsift.
     Output :
         Clusters centers of Kmeans
     '''
-    SIFT_features = []
-
     print('In build_vocabulary, step_sample =', step_sample)
+    
     desc = 'In build_vocabulary, calculating dsift'
     for i in tqdm(range(len(image_paths)), desc=desc):
         img_gray = cv2.cvtColor(cv2.imread(image_paths[i]), cv2.COLOR_BGR2GRAY)
-        _, descriptors = dsift(img_gray, step=[step_sample, step_sample],
-            fast=True)
+        _, descriptors = dsift(img_gray, step=step_sample, fast=True)
         if i == 0:
-            SIFT_features = descriptors[::2]
+            features = descriptors[::2]
         else:
-            SIFT_features = np.concatenate((SIFT_features, descriptors[::2]), axis=0)
+            features = np.concatenate((features, descriptors[::2]), axis=0)
             
     print('In build_vocabulary, calculating kmeans...', end='')
     start_time = datetime.now()
-    SIFT_features = np.matrix(SIFT_features).astype('float32')
-    vocab = kmeans(SIFT_features, vocab_size)
+    features = np.matrix(features).astype('float32')
+    vocab = kmeans(features, vocab_size)
     end_time = datetime.now()
-    print('Done! Duration: ', (end_time - start_time))
+    print('Done! Duration:', (end_time - start_time))
     ############################################################################
     #                                END OF YOUR CODE                          #
     ############################################################################
