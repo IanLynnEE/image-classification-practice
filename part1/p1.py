@@ -27,12 +27,14 @@ from glob import glob
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
+    '-f',
     '--feature', 
     help='dumy_feature, tiny_image, bag_of_sift (default)', 
     type=str, 
     default='bag_of_sift'
 )
 parser.add_argument(
+    '-c',
     '--classifier', 
     help='dumy_classifier, nearest_neighbor (default)', 
     type=str, 
@@ -52,6 +54,7 @@ parser.add_argument(
     default=400
 )
 parser.add_argument(
+    '-s',
     '--step',
     help='default = 8, step size for dsift()',
     type=int,
