@@ -7,7 +7,9 @@ from cyvlfeat.sift.dsift import dsift
 from time import time
 import cv2
 
-def get_bags_of_sifts(image_paths):
+from tqdm import tqdm
+
+def get_bags_of_sifts(image_paths， step_sample=8):
     ############################################################################
     # TODO:                                                                    #
     # This function assumes that 'vocab.pkl' exists and contains an N x 128    #
@@ -30,30 +32,27 @@ def get_bags_of_sifts(image_paths):
     '''
     Input : 
         image_paths : a list(N) of training images
+        step_sample : Integer. 
     Output : 
         image_feats : (N, d) feature, each row represent a feature of an image
     '''
-
-    with open("vocab.pkl", "rb") as voc_file:
-        vocab = pickle.load(voc_file)
-        image_feats = np.zeros((len(image_paths), len(vocab)))
-
-    step_sample = 2
+    print("In get_bags_of_sifts, step_sample =", step_sample)
+    with open('vocab.pkl', 'rb') as f:
+        vocab = pickle.load(f)
+    image_feats = np.zeros([len(image_paths), np.shape(vocab)[0]])
     
-    for i in range (len(image_paths)):
-        img = cv2.imread(image_paths[i])
-        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        _ , descriptors = dsift(img_gray, step=[step_sample,step_sample], window_size=4, fast=True)
-        descriptors =descriptors[::5]
-        dist = distance.cdist(vocab, descriptors)  
-        kmin = np.argmin(dist, axis = 0)
-        for j in kmin:
-            image_feats[i,j] += 1
+    description = 'In get_bags_of_sifts, calculating histogram'
+    for i in tqdm(range(len(image_paths), desc=description)):
+        img2D = cv2.cvtColor(cv2.imread(image_paths[i]), cv2.COLOR_BGR2GRAY)
+        frames, descriptors = dsift(img2D, step=[step_sample, step_sample],
+            window_size=4, fast=True)
+        dist = distance.cdist(vocab, descriptors[::5])  
+        kmin = np.argmin(dist, axis=0)
+        hist, bin_edges = np.histogram(kmin, bins=len(vocab))
+        image_feats[i] = hist / sum(hist)
 
     image_feats = np.matrix(image_feats)
-    #print("image_feats.shape", image_feats.shape)
-    
-    #############################################################################
-    #                                END OF YOUR CODE                           #
-    #############################################################################
+    ############################################################################
+    #                                END OF YOUR CODE                          #
+    ############################################################################
     return image_feats
