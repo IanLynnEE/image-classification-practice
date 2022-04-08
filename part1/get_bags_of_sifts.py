@@ -32,7 +32,7 @@ def get_bags_of_sifts(image_paths, step_sample=8):
     '''
     Input : 
         image_paths : a list(N) of training images
-        step_sample : Integer. 
+        step_sample : Pass to dsift. 
     Output : 
         image_feats : (N, d) feature, each row represent a feature of an image
     '''
@@ -41,12 +41,11 @@ def get_bags_of_sifts(image_paths, step_sample=8):
         vocab = pickle.load(f)
     image_feats = np.zeros([len(image_paths), np.shape(vocab)[0]])
     
-    description = 'In get_bags_of_sifts, calculating histogram'
-    for i in tqdm(range(len(image_paths), desc=description)):
-        img2D = cv2.cvtColor(cv2.imread(image_paths[i]), cv2.COLOR_BGR2GRAY)
-        frames, descriptors = dsift(img2D, step=[step_sample, step_sample],
-            window_size=4, fast=True)
-        dist = distance.cdist(vocab, descriptors[::5])  
+    desc = 'In get_bags_of_sifts, calculating histogram'
+    for i in tqdm(range(len(image_paths)), desc=desc):
+        img_gray = cv2.cvtColor(cv2.imread(image_paths[i]), cv2.COLOR_BGR2GRAY)
+        _, descriptors = dsift(img_gray, step=step_sample, fast=True)
+        dist = distance.cdist(vocab, descriptors[::2])  
         kmin = np.argmin(dist, axis=0)
         hist, bin_edges = np.histogram(kmin, bins=len(vocab))
         image_feats[i] = hist / sum(hist)
