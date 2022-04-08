@@ -4,7 +4,7 @@ import numpy as np
 import scipy.spatial.distance as distance
 
 def nearest_neighbor_classify(train_image_feats, train_labels, 
-                                test_image_feats, k_num=5):
+                                test_image_feats, k_num=5, metric='seuclidean'):
     ############################################################################
     # TODO:                                                                    #
     # This function will predict the category for every test image by finding  #
@@ -31,6 +31,8 @@ def nearest_neighbor_classify(train_image_feats, train_labels,
             dimensionality of the feature representation.
         k_num :
             Integer. Number of nearest images.
+        metric:
+            String. Pass to distance.cdist(XA, XB, metric=metric).
     Output :
         test_predicts : 
             a list(M) of string, each string indicate the predict
@@ -41,8 +43,8 @@ def nearest_neighbor_classify(train_image_feats, train_labels,
     test_predicts = []
     
     # TODO: Which one should be first? test or train?
-    d = distance.cdist(test_image_feats, train_image_feats, metric='cosine')
-    for row in d:
+    dist = distance.cdist(test_image_feats, train_image_feats, metric=metric)
+    for row in dist:
         # Indices of the k smallest elements in A.
         min_indices = np.argsort(row)[:k_num]
         # Let the nearest to vote a label.
