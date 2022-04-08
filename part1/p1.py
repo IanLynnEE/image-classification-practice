@@ -28,45 +28,45 @@ from glob import glob
 parser = argparse.ArgumentParser()
 parser.add_argument(
     '--feature', 
-    help='feature: dumy_feature, tiny_image, bag_of_sift (default)', 
+    help='dumy_feature, tiny_image, bag_of_sift (default)', 
     type=str, 
     default='bag_of_sift'
 )
 parser.add_argument(
     '--classifier', 
-    help='classifier: dumy_classifier, nearest_neighbor (default)', 
+    help='dumy_classifier, nearest_neighbor (default)', 
     type=str, 
     default='nearest_neighbor'
 )
 parser.add_argument(
+    '-p',
     '--dataset_path', 
-    help='dataset path', 
+    help='path to dataset', 
     type=str, 
     default='./p1_data/p1/'
 )
 parser.add_argument(
     '--vocab_size',
-    help='vocal_size',
+    help='default = 400, size of vocabulary',
     type=int,
     default=400
 )
 parser.add_argument(
     '--step',
-    help='step for build_vocabulary() and get_bags_of_sifts()',
+    help='default = 8, step size for dsift()',
     type=int,
     default=8
 )
 parser.add_argument(
     '-k',
-    '--K',
-    help='K in KNN',
+    help='default = 5, K-NN',
     type=int,
     default=5
 )
 parser.add_argument(
     '-m',
-    '--distance_metric',
-    help='distance metric for scipy.spatial.distance.cdist',
+    '--metric',
+    help='defalut = seuclidean, metric in scipy.spatial.distance.cdist',
     type=str,
     default='seuclidean'
 )
@@ -160,7 +160,7 @@ def main():
 
     if CLASSIFIER == 'nearest_neighbor':
         # TODO Modify nearest_neighbor_classify.py
-        predicted_categories = nearest_neighbor_classify(train_image_feats, train_labels, test_image_feats, k_num=args.K, metric=args.distance_metric)
+        predicted_categories = nearest_neighbor_classify(train_image_feats, train_labels, test_image_feats, k_num=args.k, metric=args.metric)
     
     elif CLASSIFIER == 'dumy_classifier':
         # The dummy classifier simply predicts a random category for every test case
