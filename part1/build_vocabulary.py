@@ -1,3 +1,7 @@
+from itertools import repeat
+from multiprocessing import Pool
+from datetime import datetime
+
 from PIL import Image
 import numpy as np
 from cyvlfeat.sift.dsift import dsift
@@ -6,11 +10,14 @@ from time import time
 import cv2
 
 from tqdm import tqdm
-from datetime import datetime
+
+def get_descriptors(image_path, step_sample):
+    img_gray = cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2GRAY)
+    _, descriptors = dsift(img_gray, step=step_sample, fast=True)
+    return descriptors[::2]
 
 #This function will sample SIFT descriptors from the training images,
 #cluster them with kmeans, and then return the cluster centers.
-
 def build_vocabulary(image_paths, vocab_size, step_sample=8):
     ############################################################################
     # TODO:                                                                    #
@@ -62,15 +69,14 @@ def build_vocabulary(image_paths, vocab_size, step_sample=8):
         Clusters centers of Kmeans
     '''
     print('In build_vocabulary, step_sample =', step_sample)
-    
-    desc = 'In build_vocabulary, calculating dsift'
-    for i in tqdm(range(len(image_paths)), desc=desc):
-        img_gray = cv2.cvtColor(cv2.imread(image_paths[i]), cv2.COLOR_BGR2GRAY)
-        _, descriptors = dsift(img_gray, step=step_sample, fast=True)
-        if i == 0:
-            features = descriptors[::2]
-        else:
-            features = np.concatenate((features, descriptors[::2]), axis=0)
+    print('In build_vocabulary, calculating dsift...', end='')
+    start_time = datetime.now()
+    pool = Pool(6)
+    image_feats = pool.starmap(get_descriptors, 
+        zip(image_paths, repeat(step_sample)))
+    end_time = datetime.now()
+    print('Done! Duration:', (end_time - start_time))
+    features = np.concatenate(image_feats, axis=0)
             
     print('In build_vocabulary, calculating kmeans...', end='')
     start_time = datetime.now()
