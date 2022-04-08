@@ -60,6 +60,7 @@ def build_vocabulary(image_paths, vocab_size, step_sample=8):
     Output :
         Clusters centers of Kmeans
     '''
+    
     print('In build_vocabulary, step_sample =', step_sample)
     desc = 'In build_vocabulary, calculating dsift'
     for i in tqdm(range(len(image_paths)), desc=desc):

@@ -84,7 +84,7 @@ def main():
         # TODO Modify build_vocabulary.py
         if os.path.isfile('vocab.pkl') is False:
             print('No existing visual word vocabulary found. Computing one from training images\n')
-            vocab_size = 400   ### Vocab_size is up to you. Larger values will work better (to a point) but be slower to compute
+            vocab_size = 600   ### Vocab_size is up to you. Larger values will work better (to a point) but be slower to compute
             vocab = build_vocabulary(train_image_paths, vocab_size)
             with open('vocab.pkl', 'wb') as handle:
                 pickle.dump(vocab, handle, protocol=pickle.HIGHEST_PROTOCOL)
