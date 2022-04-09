@@ -26,7 +26,11 @@ def get_tiny_images(image_paths):
         img2D = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         tiny_img2D = cv2.resize(img2D, (16, 16), interpolation=cv2.INTER_LINEAR)
         tiny_img1D = tiny_img2D.flatten()
-        tiny_images.append(tiny_img1D)
+        mean = np.mean(tiny_img1D)
+        std = np.std(tiny_img1D)
+        tiny_cal = (tiny_img1D - mean)/std
+        
+        tiny_images.append(tiny_cal)
 
     tiny_images = np.matrix(tiny_images)     
 

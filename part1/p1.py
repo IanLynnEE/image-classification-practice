@@ -31,7 +31,7 @@ parser.add_argument(
     '--feature', 
     help='dumy_feature, tiny_image, bag_of_sift (default)', 
     type=str, 
-    default='bag_of_sift'
+    default='tiny_image'
 )
 parser.add_argument(
     '-c',
@@ -69,7 +69,7 @@ parser.add_argument(
 parser.add_argument(
     '-m',
     '--metric',
-    help='defalut = seuclidean, metric in scipy.spatial.distance.cdist',
+    help='defalut = seuclidean, cityblock, metric in scipy.spatial.distance.cdist',
     type=str,
     default='cityblock'
 )
