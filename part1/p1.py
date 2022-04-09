@@ -43,7 +43,7 @@ parser.add_argument(
 parser.add_argument(
     '-p',
     '--dataset_path', 
-    help='path to dataset', 
+    help='path to train and test directory', 
     type=str, 
     default='./p1_data/p1/'
 )
@@ -56,9 +56,9 @@ parser.add_argument(
 parser.add_argument(
     '-s',
     '--step',
-    help='default = 8, step size for dsift()',
+    help='default = 2, step size for dsift()',
     type=int,
-    default=8
+    default=2
 )
 parser.add_argument(
     '-k',
@@ -69,9 +69,9 @@ parser.add_argument(
 parser.add_argument(
     '-m',
     '--metric',
-    help='defalut = seuclidean, metric in scipy.spatial.distance.cdist',
+    help='defalut = cityblock, metric in scipy.spatial.distance.cdist',
     type=str,
-    default='seuclidean'
+    default='cityblock'
 )
 
 args = parser.parse_args()

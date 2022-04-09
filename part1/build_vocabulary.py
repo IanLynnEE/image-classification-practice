@@ -9,16 +9,15 @@ from cyvlfeat.kmeans import kmeans
 from time import time
 import cv2
 
-from tqdm import tqdm
 
 def get_descriptors(image_path, step_sample):
     img_gray = cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2GRAY)
-    _, descriptors = dsift(img_gray, step=step_sample, fast=True)
+    _, descriptors = dsift(img_gray, step=step_sample, fast=False)
     return descriptors[::2]
 
 #This function will sample SIFT descriptors from the training images,
 #cluster them with kmeans, and then return the cluster centers.
-def build_vocabulary(image_paths, vocab_size, step_sample=8):
+def build_vocabulary(image_paths, vocab_size, step_sample=2):
     ############################################################################
     # TODO:                                                                    #
     # Load images from the training set. To save computation time, you don't   #
