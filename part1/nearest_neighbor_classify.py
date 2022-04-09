@@ -4,7 +4,7 @@ import numpy as np
 import scipy.spatial.distance as distance
 
 def nearest_neighbor_classify(train_image_feats, train_labels, 
-                                test_image_feats, k_num=5, metric='seuclidean'):
+                                test_image_feats, k_num=5, metric='cityblock'):
     ############################################################################
     # TODO:                                                                    #
     # This function will predict the category for every test image by finding  #

@@ -11,7 +11,7 @@ from datetime import datetime
 #This function will sample SIFT descriptors from the training images,
 #cluster them with kmeans, and then return the cluster centers.
 
-def build_vocabulary(image_paths, vocab_size, step_sample=8):
+def build_vocabulary(image_paths, vocab_size, step_sample=2):
     ############################################################################
     # TODO:                                                                    #
     # Load images from the training set. To save computation time, you don't   #

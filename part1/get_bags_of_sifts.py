@@ -9,7 +9,7 @@ import cv2
 
 from tqdm import tqdm
 
-def get_bags_of_sifts(image_paths, step_sample=8):
+def get_bags_of_sifts(image_paths, step_sample=2):
     ############################################################################
     # TODO:                                                                    #
     # This function assumes that 'vocab.pkl' exists and contains an N x 128    #
