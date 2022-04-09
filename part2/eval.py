@@ -9,7 +9,7 @@ import argparse
 from tqdm import tqdm
 
 from tool import load_parameters
-from myModels import myResnet, myLeNet
+from myModels import myResnet, myLeNet, TrainingModel
 from myDatasets import cifar10_dataset
 
 
@@ -33,7 +33,11 @@ def test_result(test_loader, model, device):
 def main():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--path', help='model_path', type=str, default='./save_dir/LeNet/best_model.pt')
+    ##MODIFY MODIFY MODIFY MODIFY MODIFY MODIFY
+    #parser.add_argument('--path', help='model_path', type=str, default='./save_dir/myLeNet/best_model.pt')
+    #parser.add_argument('--path', help='model_path', type=str, default='./save_dir/myResnet/best_model.pt')
+    parser.add_argument('--path', help='model_path', type=str, default='./save_dir/TrainingModel/best_model.pt')
+
     parser.add_argument('--test_anno', help='annotaion for test image', type=str, default= './p2_data/annotations/public_test_annos.json')
     args = parser.parse_args()
 
@@ -44,8 +48,10 @@ def main():
 
     ## TO DO ## 
     # Indicate the model you use here
-    model = myLeNet(num_out=10)    
-    
+    #model = myLeNet(num_out=10)    
+    #model = myResnet(num_out=10)
+    model = TrainingModel(num_out=10)
+
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     #device = torch.device('cpu')
     

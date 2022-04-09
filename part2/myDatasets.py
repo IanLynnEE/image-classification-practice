@@ -97,10 +97,11 @@ class cifar10_dataset(Dataset):
         
         # You shall return image, label with type "long tensor" if it's training set
         
-        img_name = self.images[idx]
-        label_name = self.labels[idx]
-        image = Image.open(self.prefix +'/'+ img_name)
-        if self.transform is not None:
-            image = self.transform(image)
-        return image, label_name
+        images = self.images[idx]
+        images = Image.open(self.prefix +'/'+ images)
+        labels = self.labels[idx]
+        if self.transform:
+            images = self.transform(images)
+        
+        return images, labels
         
