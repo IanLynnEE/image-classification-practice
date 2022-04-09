@@ -31,7 +31,7 @@ parser.add_argument(
     '--feature', 
     help='dumy_feature, tiny_image, bag_of_sift (default)', 
     type=str, 
-    default='tiny_image'
+    default='bag_of_sift'
 )
 parser.add_argument(
     '-c',

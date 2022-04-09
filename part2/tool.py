@@ -9,7 +9,7 @@ import time
 from tqdm import tqdm
 import os
 import random
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 
 def fixed_seed(myseed):
@@ -49,8 +49,8 @@ def plot_learning_curve(x, y):
     #############
     ### TO DO ### 
     # You can consider the package "matplotlib.pyplot" in this part.
+    plt.plot(x,y) 
     
-    pass
     
 
 def train(model, train_loader, val_loader, num_epoch, log_path, save_path, device, criterion, scheduler, optimizer):
@@ -78,40 +78,29 @@ def train(model, train_loader, val_loader, num_epoch, log_path, save_path, devic
             # note size of data (B,C,H,W) --> B is the batch size
             data = data.to(device)
             label = label.to(device)
-
             # pass forward function define in the model and get output 
             output = model(data) 
-
             # calculate the loss between output and ground truth
             loss = criterion(output, label)
-            
             # discard the gradient left from former iteration 
             optimizer.zero_grad()
-
             # calcualte the gradient from the loss function 
             loss.backward()
-            
             # if the gradient is too large, we dont adopt it
             grad_norm = nn.utils.clip_grad_norm_(model.parameters(), max_norm= 5.)
-            
             # Update the parameters according to the gradient we calculated
             optimizer.step()
-
             train_loss += loss.item()
-
             # predict the label from the last layers' output. Choose index with the biggest probability 
             pred = output.argmax(dim=1)
-            
             # correct if label == predict_label
             corr_num += (pred.eq(label.view_as(pred)).sum().item())
 
         # scheduler += 1 for adjusting learning rate later
         scheduler.step()
-        
         # averaging training_loss and calculate accuracy
         train_loss = train_loss / len(train_loader.dataset) 
-        train_acc = corr_num / len(train_loader.dataset)
-                
+        train_acc = corr_num / len(train_loader.dataset)  
         # record the training loss/acc
         overall_loss[i], overall_acc[i] = train_loss, train_acc
         
@@ -122,11 +111,30 @@ def train(model, train_loader, val_loader, num_epoch, log_path, save_path, devic
             val_loss = 0
             corr_num = 0
             val_acc = 0 
-            
-            ## TO DO ## 
-            # Finish forward part in validation. You can refer to the training part 
-            # Note : You don't have to update parameters this part. Just Calculate/record the accuracy and loss. 
+            for batch_idx, ( data, label,) in enumerate(tqdm(val_loader)):
+                # put the data and label on the device
+                # note size of data (B,C,H,W) --> B is the batch size
+                data = data.to(device)
+                label = label.to(device)
+                # pass forward function define in the model and get output 
+                output = model(data) 
+                # calculate the loss between output and ground truth
+                loss = criterion(output, label)
 
+                val_loss += loss.item()
+                # predict the label from the last layers' output. Choose index with the biggest probability 
+                val_pred = output.argmax(dim=1)
+                # correct if label == val_predict_label
+                corr_num += (val_pred.eq(label.view_as(val_pred)).sum().item())
+                ## TO DO ## 
+                # Finish forward part in validation. You can refer to the training part 
+                # Note : You don't have to update parameters this part. Just Calculate/record the accuracy and loss. 
+        # averaging training_loss and calculate accuracy
+        val_loss = val_loss / len(val_loader.dataset) 
+        val_acc = corr_num / len(val_loader.dataset)  
+        # record the training loss/acc
+        overall_val_loss[i], overall_val_acc[i] = val_loss, val_acc
+        
 
         
         # Display the results
@@ -165,7 +173,29 @@ def train(model, train_loader, val_loader, num_epoch, log_path, save_path, devic
     # Plot Learning Curve
     ## TO DO ##
     # Consider the function plot_learning_curve(x, y) above
-    
-    pass
+    plt.title('Accuracy')
+    plot_learning_curve(num_epoch,overall_acc) 
+    plt.xlabel('epoches')
+    plt.ylabel('Accuracy')
+    plt.show()
+    plt.savefig('plot1.png', format='png')
+    plt.title('Loss')
+    plot_learning_curve(num_epoch,overall_loss) 
+    plt.xlabel('epoches')
+    plt.ylabel('Loss')
+    plt.show()
+    plt.savefig('plot2.png', format='png')
+    plt.title('Accuracy')
+    plot_learning_curve(num_epoch,overall_val_acc) 
+    plt.xlabel('epoches')
+    plt.ylabel('Accuracy')
+    plt.show()
+    plt.savefig('plot3.png', format='png')
+    plt.title('Loss')
+    plot_learning_curve(num_epoch,overall_val_loss) 
+    plt.xlabel('epoches')
+    plt.ylabel('Loss')
+    plt.show()
+    plt.savefig('plot4.png', format='png')
 
 
