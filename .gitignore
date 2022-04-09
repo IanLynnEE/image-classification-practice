@@ -1,6 +1,8 @@
 # Dataset, pickle, and images
 p1_data/
 p2_data/
+acc_log/
+save_dir/
 *.pkl
 *.png
 
