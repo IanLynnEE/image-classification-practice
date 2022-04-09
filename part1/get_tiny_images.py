@@ -1,4 +1,4 @@
-from PIL import Image
+from math import sqrt
 import numpy as np
 import cv2
 
@@ -8,7 +8,7 @@ def crop_square(img):
     y = h // 2 - min_hw // 2; x = w // 2 - min_hw // 2
     return img[y:y+min_hw, x:x+min_hw]
 
-def get_tiny_images(image_paths, interpolation=cv2.INTER_AREA):
+def get_tiny_images(image_paths, size=121, interpolation=cv2.INTER_AREA):
     ###########################################################################
     # TODO:                                                                   #
     # To build a tiny image feature, simply resize the original image to      # 
@@ -22,15 +22,23 @@ def get_tiny_images(image_paths, interpolation=cv2.INTER_AREA):
     Input : 
         image_paths: a list(N) of string where each string is an image 
         path on the filesystem.
+        size: int. Size of feature for an image.
     Output :
         tiny_images: (N, d) matrix of resized and then vectorized tiny images.
         E.g. if the images are resized to 16x16, d would equal 256.
     '''
+    # Check the given size is correct.
+    if sqrt(size).is_integer():
+        size = int(sqrt(size))
+    else:
+        print('Warning! Number of features resets to 121.')
+        size = 11
+
     tiny_images = []
     for i in range(len(image_paths)):
         img = cv2.cvtColor(cv2.imread(image_paths[i]), cv2.COLOR_BGR2GRAY)
         square = crop_square(img)
-        tiny = cv2.resize(square, (16, 16), interpolation=interpolation)
+        tiny = cv2.resize(square, (size, size), interpolation=interpolation)
         tiny1D = tiny.flatten()
         norm = (tiny1D - np.mean(tiny1D)) / np.std(tiny1D)
         tiny_images.append(norm)

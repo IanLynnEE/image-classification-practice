@@ -48,10 +48,10 @@ parser.add_argument(
     default='./p1_data/p1/'
 )
 parser.add_argument(
-    '--vocab_size',
-    help='default = 400, size of vocabulary',
+    '-n',
+    '--num_features',
+    help='number of features per image',
     type=int,
-    default=400
 )
 parser.add_argument(
     '-s',
@@ -75,6 +75,13 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
+
+if args.num_features is None:
+    v_size = 400
+    t_size = 121
+else:
+    v_size = args.num_features
+    t_size = args.num_features
 
 DATA_PATH = args.dataset_path
 
@@ -116,15 +123,15 @@ def main():
     # each function for more details.
 
     if FEATURE == 'tiny_image':
-        # TODO Modify get_tiny_images.py 
-        train_image_feats = get_tiny_images(train_image_paths)
-        test_image_feats = get_tiny_images(test_image_paths)
+        # TODO Modify get_tiny_images.py
+        train_image_feats = get_tiny_images(train_image_paths, t_size)
+        test_image_feats = get_tiny_images(test_image_paths, t_size)
 
     elif FEATURE == 'bag_of_sift':
         # TODO Modify build_vocabulary.py
         if os.path.isfile('vocab.pkl') is False:
             print('No existing visual word vocabulary found. Computing one from training images\n')
-            vocab_size = args.vocab_size   ### Vocab_size is up to you. Larger values will work better (to a point) but be slower to compute
+            vocab_size = v_size   ### Vocab_size is up to you. Larger values will work better (to a point) but be slower to compute
             vocab = build_vocabulary(train_image_paths, vocab_size, step_sample=args.step)
             with open('vocab.pkl', 'wb') as handle:
                 pickle.dump(vocab, handle, protocol=pickle.HIGHEST_PROTOCOL)
