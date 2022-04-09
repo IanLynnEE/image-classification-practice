@@ -63,9 +63,8 @@ def get_cifar10_train_val_set(root, ratio=0.9, cv=0):
   
     ## TO DO ##
     # Complete class cifiar10_dataset
-    train_set, val_set = cifar10_dataset(images=train_image, labels=train_label,transform=train_transform), \
-                        cifar10_dataset(images=val_image, labels=val_label,transform=val_transform)
-
+    train_set = cifar10_dataset(images=train_image, labels=train_label,transform=train_transform)
+    val_set = cifar10_dataset(images=val_image, labels=val_label,transform=val_transform)
 
     return train_set, val_set
 

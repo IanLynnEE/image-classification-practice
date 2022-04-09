@@ -1,6 +1,3 @@
-
-
-
 import torch
 import torch.nn as nn
 
@@ -112,30 +109,22 @@ def train(model, train_loader, val_loader, num_epoch, log_path, save_path, devic
             corr_num = 0
             val_acc = 0 
             for batch_idx, ( data, label,) in enumerate(tqdm(val_loader)):
-                # put the data and label on the device
-                # note size of data (B,C,H,W) --> B is the batch size
-                data = data.to(device)
-                label = label.to(device)
-                # pass forward function define in the model and get output 
-                output = model(data) 
-                # calculate the loss between output and ground truth
-                loss = criterion(output, label)
-
-                val_loss += loss.item()
-                # predict the label from the last layers' output. Choose index with the biggest probability 
-                val_pred = output.argmax(dim=1)
-                # correct if label == val_predict_label
-                corr_num += (val_pred.eq(label.view_as(val_pred)).sum().item())
                 ## TO DO ## 
                 # Finish forward part in validation. You can refer to the training part 
                 # Note : You don't have to update parameters this part. Just Calculate/record the accuracy and loss. 
+                data = data.to(device)
+                label = label.to(device)
+                output = model(data) 
+                loss = criterion(output, label)
+                val_loss += loss.item()
+                val_pred = output.argmax(dim=1)
+                corr_num += (val_pred.eq(label.view_as(val_pred)).sum().item())
+                
         # averaging training_loss and calculate accuracy
         val_loss = val_loss / len(val_loader.dataset) 
         val_acc = corr_num / len(val_loader.dataset)  
         # record the training loss/acc
         overall_val_loss[i], overall_val_acc[i] = val_loss, val_acc
-        
-
         
         # Display the results
         end_time = time.time()
@@ -174,7 +163,7 @@ def train(model, train_loader, val_loader, num_epoch, log_path, save_path, devic
     ## TO DO ##
     # Consider the function plot_learning_curve(x, y) above
     plt.title('Accuracy')
-    h1 = plot_learning_curve(x,overall_acc) 
+    plot_learning_curve(x,overall_acc) 
     plt.xlabel('epoches')
     plt.ylabel('Accuracy')
     plt.show()
@@ -182,7 +171,7 @@ def train(model, train_loader, val_loader, num_epoch, log_path, save_path, devic
     plt.clf()
     
     plt.title('Loss')
-    h2 = plot_learning_curve(x,overall_loss) 
+    plot_learning_curve(x,overall_loss) 
     plt.xlabel('epoches')
     plt.ylabel('Loss')
     plt.show()
@@ -190,7 +179,7 @@ def train(model, train_loader, val_loader, num_epoch, log_path, save_path, devic
     plt.clf()
 
     plt.title('Accuracy')
-    h3 = plot_learning_curve(x,overall_val_acc) 
+    plot_learning_curve(x,overall_val_acc) 
     plt.xlabel('epoches')
     plt.ylabel('Accuracy')
     plt.show()
@@ -198,10 +187,9 @@ def train(model, train_loader, val_loader, num_epoch, log_path, save_path, devic
     plt.clf()
     
     plt.title('Loss')
-    h4 = plot_learning_curve(x,overall_val_loss) 
+    plot_learning_curve(x,overall_val_loss) 
     plt.xlabel('epoches')
     plt.ylabel('Loss')
     plt.show()
     plt.savefig('plot4.png', format='png')
     plt.clf()
-
