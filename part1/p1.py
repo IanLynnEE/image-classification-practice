@@ -58,7 +58,7 @@ parser.add_argument(
     '--step',
     help='default = 8, step size for dsift()',
     type=int,
-    default=8
+    default=2
 )
 parser.add_argument(
     '-k',
@@ -71,7 +71,7 @@ parser.add_argument(
     '--metric',
     help='defalut = seuclidean, metric in scipy.spatial.distance.cdist',
     type=str,
-    default='seuclidean'
+    default='cityblock'
 )
 
 args = parser.parse_args()
