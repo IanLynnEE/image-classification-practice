@@ -16,7 +16,7 @@ LeNet_cfg = {
     'lr':0.01,
     'milestones': [15, 25],
     'num_out': 10,
-    'num_epoch': 30,
+    'num_epoch': 25,
     
 }
 

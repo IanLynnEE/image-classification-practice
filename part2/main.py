@@ -13,8 +13,8 @@ from myDatasets import  get_cifar10_train_val_set
 from tool import train, fixed_seed
 
 # Modify config if you are conducting different models
-#from cfg import LeNet_cfg as cfg
-from cfg import ResNet_cfg as cfg
+from cfg import LeNet_cfg as cfg
+#from cfg import ResNet_cfg as cfg
 #from cfg import TrainingModel_cfg as cfg
 
 def train_interface():
@@ -53,8 +53,8 @@ def train_interface():
     
     
     ## Modify here if you want to change your model ##
-    #model = myLeNet(num_out=num_out)
-    model = myResnet(num_out=num_out)
+    model = myLeNet(num_out=num_out)
+    #model = myResnet(num_out=num_out)
     #model = TrainingModel(num_out=num_out)
 
     # print model's architecture
