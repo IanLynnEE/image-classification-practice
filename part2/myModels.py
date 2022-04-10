@@ -106,7 +106,7 @@ class myResnet(nn.Module):
 class TrainingModel(nn.Module):
     def __init__(self, num_out=10):
         super(TrainingModel, self).__init__()
-        self.model = models.wide_resnet101_2(pretrained=True, progress=True)
+        self.model = models.resnext101_32x8d(pretrained=True, progress=True)
         self.layer = nn.Linear(1000,num_out)
 
     def forward(self, x):
