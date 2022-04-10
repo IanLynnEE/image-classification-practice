@@ -45,7 +45,10 @@ def get_cifar10_train_val_set(root, ratio=0.9, cv=0):
     train_transform = transforms.Compose([
                 ## TO DO ##
                 # You can add some transforms here
-                
+                transforms.Resize(224),
+                transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5, hue=0.5),
+                transforms.RandomRotation(30),
+                transforms.RandomHorizontalFlip(0.5),
                 # ToTensor is needed to convert the type, PIL IMG,  to the typ, float tensor.  
                 transforms.ToTensor(),
                 
