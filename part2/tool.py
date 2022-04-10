@@ -162,22 +162,30 @@ def train(model, train_loader, val_loader, num_epoch, log_path, save_path, devic
     # Plot Learning Curve
     ## TO DO ##
     # Consider the function plot_learning_curve(x, y) above
-    plt.title('Accuracy')
-    plot_learning_curve(x,overall_acc) 
+    plt.title('Training Accuracy')
+    plot_learning_curve(x,overall_acc)
+    plt.xlabel('epoch')
+    plt.ylabel('acc')
     plt.savefig('plot1.png', format='png')
     plt.clf()
     
-    plt.title('Loss')
+    plt.title('Training Loss')
     plot_learning_curve(x,overall_loss) 
+    plt.xlabel('epoch')
+    plt.ylabel('loss')
     plt.savefig('plot2.png', format='png')
     plt.clf()
 
-    plt.title('Accuracy')
-    plot_learning_curve(x,overall_val_acc) 
+    plt.title('Training Accuracy')
+    plot_learning_curve(x,overall_val_acc)
+    plt.xlabel('epoch')
+    plt.ylabel('acc') 
     plt.savefig('plot3.png', format='png')
     plt.clf()
     
-    plt.title('Loss')
+    plt.title('Training Loss')
     plot_learning_curve(x,overall_val_loss) 
+    plt.xlabel('epoch')
+    plt.ylabel('loss')
     plt.savefig('plot4.png', format='png')
     plt.clf()
