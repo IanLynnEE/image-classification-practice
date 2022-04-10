@@ -176,14 +176,14 @@ def train(model, train_loader, val_loader, num_epoch, log_path, save_path, devic
     plt.savefig('plot2.png', format='png')
     plt.clf()
 
-    plt.title('Training Accuracy')
+    plt.title('Validation Accuracy')
     plot_learning_curve(x,overall_val_acc)
     plt.xlabel('epoch')
     plt.ylabel('acc') 
     plt.savefig('plot3.png', format='png')
     plt.clf()
     
-    plt.title('Training Loss')
+    plt.title('Validation Loss')
     plot_learning_curve(x,overall_val_loss) 
     plt.xlabel('epoch')
     plt.ylabel('loss')
