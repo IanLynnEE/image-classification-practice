@@ -107,9 +107,13 @@ class TrainingModel(nn.Module):
     def __init__(self, num_out=10):
         super(TrainingModel, self).__init__()
         self.model = models.wide_resnet50_2(pretrained=True, progress=True)
-        self.layer = nn.Linear(1000,num_out)
+        self.fc = nn.Sequential(
+            nn.Dropout(),
+            nn.Linear(1000,num_out),
+        )
+        
 
     def forward(self, x):
         x = self.model(x)
-        x = self.layer(x)
+        x = self.fc(x)
         return x
