@@ -75,14 +75,14 @@ class myResnet(nn.Module):
         self.model = nn.Sequential(nn.Conv2d(64,128,kernel_size=5,stride=1),
                              nn.ReLU(),
                              nn.MaxPool2d(kernel_size=2,stride=2),)
-        
+
         self.residual_block1 = nn.Sequential(residual_block(128))
         self.residual_block2 = nn.Sequential(residual_block(128))
         #self.residual_block3 = nn.Sequential(residual_block(256))
 
         #self.avg_pool = nn.MaxPool2d(kernel_size=2,stride=2)
-        self.fc1 = nn.Sequential(nn.Linear(25088,16), nn.ReLU())
-        self.fc2 = nn.Sequential(nn.Linear(16,84), nn.ReLU())
+        self.fc1 = nn.Sequential(nn.Linear(25088,160), nn.ReLU())
+        self.fc2 = nn.Sequential(nn.Linear(160,84), nn.ReLU())
         self.fc3 = nn.Linear(84,num_out)
 
     def forward(self,x):
