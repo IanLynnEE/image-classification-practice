@@ -108,7 +108,7 @@ class TrainingModel(nn.Module):
         super(TrainingModel, self).__init__()
         self.model = models.wide_resnet50_2(pretrained=True, progress=True)
         self.fc = nn.Sequential(
-            nn.Dropout(),
+            #nn.Dropout(),
             nn.Linear(1000,num_out),
         )
         
