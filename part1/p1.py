@@ -43,7 +43,7 @@ parser.add_argument(
 parser.add_argument(
     '-p',
     '--dataset_path', 
-    help='path to dataset', 
+    help='path to train and test directory', 
     type=str, 
     default='./p1_data/p1/'
 )

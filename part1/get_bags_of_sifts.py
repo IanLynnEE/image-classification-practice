@@ -1,3 +1,7 @@
+from itertools import repeat
+from multiprocessing import Pool
+from datetime import datetime
+
 from PIL import Image
 import numpy as np
 from scipy.spatial import distance
@@ -7,7 +11,14 @@ from cyvlfeat.sift.dsift import dsift
 from time import time
 import cv2
 
-from tqdm import tqdm
+
+def get_norm_hist(vocab, image_path, step_sample):
+    img_gray = cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2GRAY)
+    _, descriptors = dsift(img_gray, step=step_sample, fast=False)
+    dist = distance.cdist(vocab, descriptors[::2])  
+    kmin = np.argmin(dist, axis=0)
+    hist, bin_edges = np.histogram(kmin, bins=len(vocab))
+    return hist / sum(hist)
 
 def get_bags_of_sifts(image_paths, step_sample=2):
     ############################################################################
@@ -36,22 +47,17 @@ def get_bags_of_sifts(image_paths, step_sample=2):
     Output : 
         image_feats : (N, d) feature, each row represent a feature of an image
     '''
-    print("In get_bags_of_sifts, step_sample =", step_sample)
     with open('vocab.pkl', 'rb') as f:
         vocab = pickle.load(f)
-    image_feats = np.zeros([len(image_paths), np.shape(vocab)[0]])
-    
-    desc = 'In get_bags_of_sifts, calculating histogram'
-    for i in tqdm(range(len(image_paths)), desc=desc):
-        img_gray = cv2.cvtColor(cv2.imread(image_paths[i]), cv2.COLOR_BGR2GRAY)
-        _, descriptors = dsift(img_gray, step=step_sample, fast=True)
-        dist = distance.cdist(vocab, descriptors[::2])  
-        kmin = np.argmin(dist, axis=0)
-        hist, bin_edges = np.histogram(kmin, bins=len(vocab))
-        image_feats[i] = hist / sum(hist)
-
-    image_feats = np.matrix(image_feats)
+    print('In get_bags_of_sifts, step_sample =', step_sample)
+    print('In get_bags_of_sifts, calculating histogram...', end='')
+    start_time = datetime.now()
+    pool = Pool(6)
+    image_feats = pool.starmap(get_norm_hist, 
+        zip(repeat(vocab), image_paths, repeat(step_sample)))
+    end_time = datetime.now()
+    print('Done! Duration:', (end_time - start_time))
     ############################################################################
     #                                END OF YOUR CODE                          #
     ############################################################################
-    return image_feats
+    return np.matrix(image_feats)
