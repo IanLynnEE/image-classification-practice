@@ -34,9 +34,9 @@ def main():
 
     parser = argparse.ArgumentParser()
     ##MODIFY MODIFY MODIFY MODIFY MODIFY MODIFY
-    parser.add_argument('--path', help='model_path', type=str, default='./save_dir/LeNet/best_model.pt')
+    #parser.add_argument('--path', help='model_path', type=str, default='./save_dir/LeNet/best_model.pt')
     #parser.add_argument('--path', help='model_path', type=str, default='./save_dir/ResNet/best_model.pt')
-    #parser.add_argument('--path', help='model_path', type=str, default='./save_dir/TrainingModel/best_model.pt')
+    parser.add_argument('--path', help='model_path', type=str, default='./save_dir/TrainingModel/best_model.pt')
 
     parser.add_argument('--test_anno', help='annotaion for test image', type=str, default= './p2_data/annotations/public_test_annos.json')
     args = parser.parse_args()
@@ -48,9 +48,9 @@ def main():
 
     ## TO DO ## 
     # Indicate the model you use here
-    model = myLeNet(num_out=10)    
+    #model = myLeNet(num_out=10)    
     #model = myResnet(num_out=10)
-    #model = TrainingModel(num_out=10)
+    model = TrainingModel(num_out=10)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     #device = torch.device('cpu')

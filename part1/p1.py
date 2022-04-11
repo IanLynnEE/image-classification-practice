@@ -26,62 +26,10 @@ from glob import glob
 #and you can get a preview of how results are presented.
 
 parser = argparse.ArgumentParser()
-parser.add_argument(
-    '-f',
-    '--feature', 
-    help='dumy_feature, tiny_image, bag_of_sift (default)', 
-    type=str, 
-    default='bag_of_sift'
-)
-parser.add_argument(
-    '-c',
-    '--classifier', 
-    help='dumy_classifier, nearest_neighbor (default)', 
-    type=str, 
-    default='nearest_neighbor'
-)
-parser.add_argument(
-    '-p',
-    '--dataset_path', 
-    help='path to dataset', 
-    type=str, 
-    default='./p1_data/p1/'
-)
-parser.add_argument(
-    '-n',
-    '--num_features',
-    help='number of features per image',
-    type=int,
-)
-parser.add_argument(
-    '-s',
-    '--step',
-    help='default = 2, step size for dsift()',
-    type=int,
-    default=2
-)
-parser.add_argument(
-    '-k',
-    help='default = 5, K-NN',
-    type=int,
-    default=5
-)
-parser.add_argument(
-    '-m',
-    '--metric',
-    help='defalut = cityblock, metric in scipy.spatial.distance.cdist',
-    type=str,
-    default='cityblock'
-)
-
+parser.add_argument('--feature', help='feature', type=str, default='dumy_feature')
+parser.add_argument('--classifier', help='classifier', type=str, default='dumy_classifier')
+parser.add_argument('--dataset_path', help='dataset path', type=str, default='./p1_data/p1/')
 args = parser.parse_args()
-
-if args.num_features is None:
-    v_size = 400
-    t_size = 121
-else:
-    v_size = args.num_features
-    t_size = args.num_features
 
 DATA_PATH = args.dataset_path
 
@@ -123,22 +71,22 @@ def main():
     # each function for more details.
 
     if FEATURE == 'tiny_image':
-        # TODO Modify get_tiny_images.py
-        train_image_feats = get_tiny_images(train_image_paths, t_size)
-        test_image_feats = get_tiny_images(test_image_paths, t_size)
+        # TODO Modify get_tiny_images.py 
+        train_image_feats = get_tiny_images(train_image_paths)
+        test_image_feats = get_tiny_images(test_image_paths)
 
     elif FEATURE == 'bag_of_sift':
         # TODO Modify build_vocabulary.py
         if os.path.isfile('vocab.pkl') is False:
             print('No existing visual word vocabulary found. Computing one from training images\n')
-            vocab_size = v_size   ### Vocab_size is up to you. Larger values will work better (to a point) but be slower to compute
-            vocab = build_vocabulary(train_image_paths, vocab_size, step_sample=args.step)
+            vocab_size = 400   ### Vocab_size is up to you. Larger values will work better (to a point) but be slower to compute
+            vocab = build_vocabulary(train_image_paths, vocab_size)
             with open('vocab.pkl', 'wb') as handle:
                 pickle.dump(vocab, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
         if os.path.isfile('train_image_feats.pkl') is False:
             # TODO Modify get_bags_of_sifts.py
-            train_image_feats = get_bags_of_sifts(train_image_paths, step_sample=args.step);
+            train_image_feats = get_bags_of_sifts(train_image_paths);
             with open('train_image_feats.pkl', 'wb') as handle:
                 pickle.dump(train_image_feats, handle, protocol=pickle.HIGHEST_PROTOCOL)
         else:
@@ -146,7 +94,7 @@ def main():
                 train_image_feats = pickle.load(handle)
 
         if os.path.isfile('test_image_feats.pkl') is False:
-            test_image_feats  = get_bags_of_sifts(test_image_paths, step_sample=args.step);
+            test_image_feats  = get_bags_of_sifts(test_image_paths);
             with open('test_image_feats.pkl', 'wb') as handle:
                 pickle.dump(test_image_feats, handle, protocol=pickle.HIGHEST_PROTOCOL)
         else:
@@ -170,7 +118,7 @@ def main():
 
     if CLASSIFIER == 'nearest_neighbor':
         # TODO Modify nearest_neighbor_classify.py
-        predicted_categories = nearest_neighbor_classify(train_image_feats, train_labels, test_image_feats, k_num=args.k, metric=args.metric)
+        predicted_categories = nearest_neighbor_classify(train_image_feats, train_labels, test_image_feats)
     
     elif CLASSIFIER == 'dumy_classifier':
         # The dummy classifier simply predicts a random category for every test case
