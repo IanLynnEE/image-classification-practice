@@ -146,7 +146,7 @@ def train(model, train_loader, val_loader, num_epoch, log_path, save_path, devic
             f.write('============================\n')
 
         # save model for every epoch 
-        #torch.save(model.state_dict(), os.path.join(save_path, f'epoch_{i}.pt'))
+        torch.save(model.state_dict(), os.path.join(save_path, f'epoch_{i}.pt'))
         
         # save the best model if it gain performance on validation set
         if  val_acc > best_acc:

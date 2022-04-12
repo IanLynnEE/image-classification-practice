@@ -111,7 +111,9 @@ class TrainingModel(nn.Module):
         super(TrainingModel, self).__init__()
         self.model = models.googlenet(pretrained=True, progress=True)
         self.fc = nn.Sequential(
-            #nn.Dropout(),
+            nn.Dropout(),
+            nn.ReLU(),
+            #nn.BatchNorm1d(1000),
             nn.Linear(1000,num_out),
         )
         
